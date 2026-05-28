@@ -207,20 +207,26 @@ export interface PurchaseStats {
 }
 
 export async function recordPurchase(payload: PurchasePayload): Promise<PurchaseResult> {
+  const { device_id, ...body } = payload;
   const resp = await fetchWithTimeout(`${BASE_URL}/api/purchases`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Device-ID': device_id,
+    },
+    // Never send device_id in the body — server reads it from header only
+    body: JSON.stringify(body),
   });
   if (!resp.ok) throw new Error(`purchase HTTP ${resp.status}`);
   return resp.json();
 }
 
 export async function getPurchaseStats(deviceId: string): Promise<PurchaseStats> {
-  const resp = await fetchWithTimeout(
-    `${BASE_URL}/api/purchases/stats?device_id=${encodeURIComponent(deviceId)}`,
-    { method: 'GET' }
-  );
+  // device_id sent as header, not query param (prevents URL logging exposure)
+  const resp = await fetchWithTimeout(`${BASE_URL}/api/purchases/stats`, {
+    method: 'GET',
+    headers: { 'X-Device-ID': deviceId },
+  });
   if (!resp.ok) throw new Error(`stats HTTP ${resp.status}`);
   return resp.json();
 }

@@ -9,6 +9,9 @@ export function buildAffiliateUrl(baseUrl: string, platformId: string): string {
 }
 
 export function trackClick(platformId: string, productId: string): void {
-  // Fire analytics event — in production this posts to /api/track
-  console.log('[affiliate]', { platformId, productId, ts: Date.now() });
+  // TODO: implement POST to /api/track when analytics endpoint is ready
+  // Do not log in production — affiliate tags are business-sensitive
+  if (__DEV__) {
+    console.log('[affiliate] click', { platformId, productId });
+  }
 }

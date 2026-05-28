@@ -4,7 +4,7 @@ services:
   api:
     build: .
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"   # Bind to localhost only — not exposed externally
     env_file: .env
     depends_on:
       - postgres
@@ -18,18 +18,19 @@ services:
     image: postgres:16-alpine
     environment:
       POSTGRES_USER: waffir
-      POSTGRES_PASSWORD: secret
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme_set_in_env}   # Set POSTGRES_PASSWORD in .env
       POSTGRES_DB: waffir
     volumes:
       - pg_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"   # Localhost only — never expose to internet
     restart: unless-stopped
 
   redis:
     image: redis:7-alpine
+    command: redis-server --requirepass ${REDIS_PASSWORD:-changeme_set_in_env}  # Auth required
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"   # Localhost only
     volumes:
       - redis_data:/data
     restart: unless-stopped

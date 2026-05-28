@@ -29,11 +29,20 @@ export const PRICE_CHECK_TASK = 'WAFFIR_PRICE_CHECK';
 // the app registers it.
 TaskManager.defineTask(PRICE_CHECK_TASK, async (): Promise<BackgroundFetch.BackgroundFetchResult> => {
   try {
-    const raw = await AsyncStorage.getItem('waffir-store');
+    // Key must match the persist key in useStore.ts ('waffir-store-v2')
+    const raw = await AsyncStorage.getItem('waffir-store-v2');
     if (!raw) return BackgroundFetch.BackgroundFetchResult.NoData;
 
-    const stored = JSON.parse(raw);
-    const alerts: PriceAlert[] = stored?.state?.priceAlerts ?? [];
+    let stored: any;
+    try {
+      stored = JSON.parse(raw);
+    } catch {
+      return BackgroundFetch.BackgroundFetchResult.Failed;
+    }
+
+    const alerts: PriceAlert[] = Array.isArray(stored?.state?.priceAlerts)
+      ? stored.state.priceAlerts
+      : [];
 
     if (!alerts.length) return BackgroundFetch.BackgroundFetchResult.NoData;
 

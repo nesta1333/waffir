@@ -17,15 +17,17 @@ export async function requestNotificationPermission(): Promise<boolean> {
   // Simulators / web environments don't support notifications
   if (!Device.isDevice) return false;
 
-  const { status: existing } = await Notifications.getPermissionsAsync();
-  let finalStatus = existing;
+  // expo-notifications 0.29.x — PermissionResponse shape varies by platform;
+  // cast to any to avoid version-specific TypeScript mismatch
+  const existingPerms = (await Notifications.getPermissionsAsync()) as any;
+  let isGranted: boolean = existingPerms.granted ?? existingPerms.status === 'granted';
 
-  if (existing !== 'granted') {
-    const { status } = await Notifications.requestPermissionsAsync();
-    finalStatus = status;
+  if (!isGranted) {
+    const newPerms = (await Notifications.requestPermissionsAsync()) as any;
+    isGranted = newPerms.granted ?? newPerms.status === 'granted';
   }
 
-  if (finalStatus !== 'granted') return false;
+  if (!isGranted) return false;
 
   // Android requires an explicit channel with a name + importance level
   if (Platform.OS === 'android') {

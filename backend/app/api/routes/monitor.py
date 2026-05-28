@@ -2,25 +2,44 @@
 /api/monitor — lightweight endpoint the mobile app calls to check
 whether any stored price alerts have been triggered.
 
-The mobile app is the source of truth for which alerts exist
-(stored locally in AsyncStorage). This endpoint just does the price
-lookup and returns the triggered subset — no server-side persistence.
+Security:
+  - Max 50 alerts per request (prevents resource exhaustion)
+  - product_name_ar limited to 500 chars
+  - currency validated to known values
+  - Rate limiting handled at nginx/Render level; add slowapi here if needed
 """
-from fastapi import APIRouter
-from pydantic import BaseModel
+import unicodedata
+from fastapi import APIRouter, HTTPException, status
+from pydantic import BaseModel, Field, field_validator
 from app.services.price_monitor import check_alerts
 
 router = APIRouter()
 
+_ALLOWED_CURRENCIES = {"AED", "SAR", "KWD", "BHD", "OMR", "QAR"}
+_MAX_ALERTS_PER_REQUEST = 50
+
 
 class AlertCheckItem(BaseModel):
-    product_name_ar: str
-    target_price: float
-    currency: str = "AED"
+    product_name_ar: str   = Field(..., min_length=1, max_length=500)
+    target_price:    float = Field(..., gt=0, le=500_000)
+    currency:        str   = Field("AED", max_length=5)
+
+    @field_validator("currency")
+    @classmethod
+    def validate_currency(cls, v: str) -> str:
+        v = v.upper().strip()
+        if v not in _ALLOWED_CURRENCIES:
+            raise ValueError(f"currency must be one of {_ALLOWED_CURRENCIES}")
+        return v
+
+    @field_validator("product_name_ar")
+    @classmethod
+    def normalize_text(cls, v: str) -> str:
+        return unicodedata.normalize("NFC", v.strip())
 
 
 class AlertCheckRequest(BaseModel):
-    alerts: list[AlertCheckItem]
+    alerts: list[AlertCheckItem] = Field(..., max_length=_MAX_ALERTS_PER_REQUEST)
 
 
 class TriggeredAlert(AlertCheckItem):
@@ -35,9 +54,12 @@ class AlertCheckResponse(BaseModel):
 @router.post("/check", response_model=AlertCheckResponse)
 async def check_price_alerts(req: AlertCheckRequest):
     """
-    Given a list of alerts, return those whose current best price ≤ target.
+    Given a list of alerts (max 50), return those whose current best price ≤ target.
     The mobile app uses this to fire local notifications.
     """
+    if not req.alerts:
+        return AlertCheckResponse(triggered=[], checked=0)
+
     raw_alerts = [a.model_dump() for a in req.alerts]
     triggered_raw = await check_alerts(raw_alerts)
 

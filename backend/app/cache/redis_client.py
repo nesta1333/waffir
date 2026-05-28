@@ -3,9 +3,11 @@ Cache layer — Redis if available, otherwise in-memory dict (dev mode).
 Set REDIS_URL=redis://... in .env to use Redis.
 Leave it empty or unset to use the built-in memory cache (no install needed).
 """
+import hashlib
 import json
 import os
 import time
+import unicodedata
 from typing import Any, Optional
 
 CACHE_TTL = 60 * 30  # 30 minutes
@@ -64,7 +66,17 @@ async def cache_delete(key: str) -> None:
 
 
 def search_cache_key(query: str, currency: str) -> str:
-    return f"search:{query.strip().lower()}:{currency}"
+    """
+    Build a safe Redis cache key from a user query.
+
+    - Applies NFC Unicode normalization (prevents Arabic homoglyph cache bypass)
+    - Hashes the query so arbitrary user input never becomes part of the key
+      (prevents key-space collision with alert:, user_alerts:, product: namespaces)
+    """
+    normalized = unicodedata.normalize("NFC", query.strip().lower())
+    query_hash = hashlib.sha256(normalized.encode()).hexdigest()[:32]
+    currency_safe = currency.upper().strip()[:5]
+    return f"search:{query_hash}:{currency_safe}"
 
 
 def product_cache_key(product_id: str) -> str:
