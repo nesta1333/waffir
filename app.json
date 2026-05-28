@@ -35,8 +35,7 @@
         "RECEIVE_BOOT_COMPLETED",
         "VIBRATE",
         "POST_NOTIFICATIONS"
-      ],
-      "kotlinVersion": "1.9.25"
+      ]
     },
     "web": {
       "bundler": "metro",

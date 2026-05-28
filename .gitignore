@@ -33,4 +33,4 @@ ios/
 # ── Misc ─────────────────────────────────────────────────────────────────────
 *.log
 .DS_Store
-google-play-key.json
+google-play-key.json.expo/ 
