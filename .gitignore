@@ -4,3 +4,33 @@
 
 expo-env.d.ts
 # @end expo-cli
+
+# ── Environment / Secrets (NEVER commit these) ────────────────────────────────
+.env
+.env.local
+.env.*.local
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+backend/waffir.db
+*.db
+
+# ── Node / Expo ───────────────────────────────────────────────────────────────
+node_modules/
+.expo/
+dist/
+build/
+android/
+ios/
+
+# ── Misc ─────────────────────────────────────────────────────────────────────
+*.log
+.DS_Store
+google-play-key.json
