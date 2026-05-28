@@ -17,13 +17,13 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://waffir-api.onrender.com"
+        "EXPO_PUBLIC_API_URL": "https://waffir.onrender.com"
       }
     },
     "production": {
       "autoIncrement": true,
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://waffir-api.onrender.com"
+        "EXPO_PUBLIC_API_URL": "https://waffir.onrender.com"
       }
     }
   },

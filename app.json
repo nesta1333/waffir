@@ -71,11 +71,14 @@
       "typedRoutes": true
     },
     "extra": {
-      "apiUrl": "",
+      "apiUrl": "https://waffir.onrender.com",
       "eas": {
-        "projectId": "YOUR_EAS_PROJECT_ID"
+        "projectId": "8d1c6ecf-f581-4029-80af-5ddd1f45af9c"
+      },
+      "router": {
+        "origin": false
       }
     },
-    "owner": "YOUR_EXPO_USERNAME"
+    "owner": "nesta1s-organization"
   }
 }
