@@ -6,8 +6,6 @@ sqlalchemy==2.0.36
 asyncpg==0.30.0
 alembic==1.14.0
 redis==5.2.0
-playwright==1.49.0
-browser-use==0.1.40
 python-dotenv==1.0.1
 httpx==0.28.1
 aiohttp==3.11.10
