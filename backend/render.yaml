@@ -25,10 +25,14 @@ services:
         generateValue: true        # Render ينشئ قيمة عشوائية آمنة تلقائياً
 
       - key: CORS_ORIGINS
-        value: "*"                 # عدّل بعد الإطلاق لقصره على دومينك
+        value: "*"                 # TODO: قيّده بعد رفع التطبيق: com.waffir.app,https://yourdomain.com
 
       - key: TOKEN_EXPIRE_DAYS
         value: "30"
+
+      # Search — مطلوب للبحث الحقيقي
+      - key: SERPER_API_KEY
+        sync: false                # أدخل القيمة يدوياً في Render Dashboard
 
       # SMS — أضف هذه لاحقاً عند إنشاء حساب Twilio
       # - key: TWILIO_ACCOUNT_SID

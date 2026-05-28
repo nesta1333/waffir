@@ -84,23 +84,30 @@ export async function getProduct(id: string): Promise<Product | null> {
   return mapProduct(data);
 }
 
-export async function createAlert(payload: {
-  product_id: string;
-  product_name_ar: string;
-  target_price: number;
-  currency: string;
-}): Promise<void> {
+export async function createAlert(
+  payload: {
+    product_id: string;
+    product_name_ar: string;
+    target_price: number;
+    currency: string;
+  },
+  deviceId: string,
+): Promise<void> {
   const resp = await fetchWithTimeout(`${BASE_URL}/api/alerts/`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Device-ID': deviceId,
+    },
     body: JSON.stringify(payload),
   });
   if (!resp.ok) throw new Error(`alert HTTP ${resp.status}`);
 }
 
-export async function deleteAlert(productId: string): Promise<void> {
-  const resp = await fetchWithTimeout(`${BASE_URL}/api/alerts/${productId}`, {
+export async function deleteAlert(alertId: string, deviceId: string): Promise<void> {
+  const resp = await fetchWithTimeout(`${BASE_URL}/api/alerts/${alertId}`, {
     method: 'DELETE',
+    headers: { 'X-Device-ID': deviceId },
   });
   if (!resp.ok && resp.status !== 404) throw new Error(`delete alert HTTP ${resp.status}`);
 }

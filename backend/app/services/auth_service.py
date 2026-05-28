@@ -15,8 +15,8 @@ JWT:
   TOKEN_EXPIRE_DAYS — default 30 days
 """
 import os
-import random
-import string
+import hmac
+import secrets
 import logging
 from datetime import datetime, timedelta
 
@@ -29,7 +29,18 @@ from app.db.models import User, OtpCode
 log = logging.getLogger(__name__)
 
 # ── Config ────────────────────────────────────────────────────────────────────
-SECRET_KEY        = os.getenv("SECRET_KEY", "change-me-in-production-use-long-random-string")
+SECRET_KEY = os.getenv("SECRET_KEY", "")
+if not SECRET_KEY:
+    # Fail loudly — never run in production without a real key
+    import sys
+    log.critical("SECRET_KEY is not set! Set it in .env before running.")
+    if os.getenv("RENDER") or os.getenv("RAILWAY_ENVIRONMENT"):
+        # Hard exit on cloud environments
+        sys.exit(1)
+    # Dev: use a fixed fallback but warn every startup
+    SECRET_KEY = "dev-only-insecure-key-do-not-use-in-production"
+    log.warning("Using insecure dev SECRET_KEY — set SECRET_KEY in .env")
+
 ALGORITHM         = "HS256"
 TOKEN_EXPIRE_DAYS = int(os.getenv("TOKEN_EXPIRE_DAYS", "30"))
 OTP_EXPIRE_MINUTES = 10
@@ -39,15 +50,24 @@ TWILIO_SID   = os.getenv("TWILIO_ACCOUNT_SID", "")
 TWILIO_TOKEN = os.getenv("TWILIO_AUTH_TOKEN", "")
 TWILIO_FROM  = os.getenv("TWILIO_PHONE_FROM", "")
 
+# Detect production mode (Twilio configured = production)
+_IS_PRODUCTION = bool(TWILIO_SID and TWILIO_TOKEN and TWILIO_FROM)
+
 
 # ── OTP helpers ───────────────────────────────────────────────────────────────
 def _generate_otp() -> str:
-    return "".join(random.choices(string.digits, k=6))
+    """Generate a cryptographically secure 6-digit OTP."""
+    return "".join(secrets.choice("0123456789") for _ in range(6))
+
+
+def _verify_otp_code(stored: str, provided: str) -> bool:
+    """Timing-safe OTP comparison — prevents timing attacks."""
+    return hmac.compare_digest(stored.encode(), provided.encode())
 
 
 async def _send_sms(phone: str, code: str) -> None:
     """Send OTP via Twilio if configured, else log for dev."""
-    if TWILIO_SID and TWILIO_TOKEN and TWILIO_FROM:
+    if _IS_PRODUCTION:
         try:
             from twilio.rest import Client  # type: ignore
             client = Client(TWILIO_SID, TWILIO_TOKEN)
@@ -61,9 +81,10 @@ async def _send_sms(phone: str, code: str) -> None:
             log.error("Twilio error: %s", exc)
             raise RuntimeError("فشل إرسال الرسالة — حاول مجدداً") from exc
     else:
-        # ─── DEV MODE ───────────────────────────────────────────────────────
+        # ─── DEV MODE ONLY — never reached in production ─────────────────────
         log.warning("=" * 50)
         log.warning("DEV OTP for %s  →  %s", phone, code)
+        log.warning("Set TWILIO_* in .env to enable real SMS")
         log.warning("=" * 50)
 
 
@@ -117,7 +138,8 @@ async def verify_otp(phone: str, code: str, db: AsyncSession) -> "User":
         otp_row.used = True
         raise ValueError("تجاوزت الحد الأقصى للمحاولات")
 
-    if otp_row.code != code:
+    # Timing-safe comparison
+    if not _verify_otp_code(otp_row.code, code):
         raise ValueError("رمز التحقق غير صحيح")
 
     otp_row.used = True

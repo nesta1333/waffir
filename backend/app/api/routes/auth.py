@@ -10,7 +10,12 @@ Auth endpoints:
 from datetime import datetime
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, status
+import re
+import time
+from collections import defaultdict
+from threading import Lock
+
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -23,6 +28,31 @@ from app.services.auth_service import (
     send_otp, verify_otp, create_access_token,
     decode_token,
 )
+
+# ── Simple in-memory rate limiter for OTP ────────────────────────────────────
+# Max 3 OTP requests per phone per 10 minutes
+_OTP_RATE: dict[str, list[float]] = defaultdict(list)
+_OTP_RATE_LOCK = Lock()
+_OTP_MAX_REQUESTS = 3
+_OTP_WINDOW_SECONDS = 600  # 10 minutes
+
+# Phone number validation: E.164 with Gulf country codes
+_PHONE_RE = re.compile(r"^\+(?:971|966|965|973|968|974)\d{7,9}$")
+
+
+def _check_otp_rate_limit(phone: str) -> None:
+    """Raises 429 if phone has exceeded OTP request limit."""
+    now = time.time()
+    with _OTP_RATE_LOCK:
+        # Remove timestamps outside the window
+        _OTP_RATE[phone] = [t for t in _OTP_RATE[phone] if now - t < _OTP_WINDOW_SECONDS]
+        if len(_OTP_RATE[phone]) >= _OTP_MAX_REQUESTS:
+            raise HTTPException(
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                detail=f"تجاوزت الحد المسموح — انتظر {_OTP_WINDOW_SECONDS // 60} دقائق قبل المحاولة مجدداً",
+                headers={"Retry-After": str(_OTP_WINDOW_SECONDS)},
+            )
+        _OTP_RATE[phone].append(now)
 
 router = APIRouter()
 _bearer = HTTPBearer(auto_error=False)
@@ -96,11 +126,21 @@ async def _current_user(
 async def send_otp_endpoint(req: SendOtpRequest, db: AsyncSession = Depends(get_db)):
     """
     Send a 6-digit OTP to the phone number.
+    Rate limited: max 3 requests per phone per 10 minutes.
     In dev mode (no Twilio config) the code is printed to server logs.
     """
     phone = req.phone.strip()
-    if not phone.startswith("+"):
-        raise HTTPException(status_code=422, detail="رقم الهاتف يجب أن يبدأ بـ + (مثال: +971501234567)")
+
+    # Validate Gulf phone number format
+    if not _PHONE_RE.match(phone):
+        raise HTTPException(
+            status_code=422,
+            detail="رقم الهاتف غير صالح — يجب أن يبدأ بكود دولة خليجي (مثال: +971501234567)",
+        )
+
+    # Rate limit check
+    _check_otp_rate_limit(phone)
+
     try:
         await send_otp(phone, db)
     except RuntimeError as exc:
