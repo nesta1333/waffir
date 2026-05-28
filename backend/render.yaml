@@ -1,0 +1,51 @@
+services:
+  # ── FastAPI Web Service ────────────────────────────────────────────────────
+  - type: web
+    name: waffir-api
+    runtime: python
+    region: frankfurt          # أقرب للخليج من المناطق المتاحة
+    plan: free                 # الباقة المجانية — ترقية لاحقاً عند الحاجة
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1
+    healthCheckPath: /health
+
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: waffir-db
+          property: connectionString
+
+      - key: REDIS_URL
+        fromService:
+          name: waffir-redis
+          type: redis
+          property: connectionString
+
+      - key: SECRET_KEY
+        generateValue: true        # Render ينشئ قيمة عشوائية آمنة تلقائياً
+
+      - key: CORS_ORIGINS
+        value: "*"                 # عدّل بعد الإطلاق لقصره على دومينك
+
+      - key: TOKEN_EXPIRE_DAYS
+        value: "30"
+
+      # SMS — أضف هذه لاحقاً عند إنشاء حساب Twilio
+      # - key: TWILIO_ACCOUNT_SID
+      #   value: ""
+      # - key: TWILIO_AUTH_TOKEN
+      #   value: ""
+      # - key: TWILIO_PHONE_FROM
+      #   value: ""
+
+  # ── Redis ──────────────────────────────────────────────────────────────────
+  - type: redis
+    name: waffir-redis
+    plan: free
+    maxmemoryPolicy: allkeys-lru
+
+databases:
+  # ── PostgreSQL ─────────────────────────────────────────────────────────────
+  - name: waffir-db
+    databaseName: waffir
+    plan: free                 # 1GB مجاني — كافٍ للبداية

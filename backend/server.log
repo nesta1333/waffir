@@ -1,0 +1,47 @@
+2026-05-28 18:47:16 [info     ] google_search.serper           count=2 query=Sony WH-1000XM5 site:noon.com
+2026-05-28 18:47:16 [info     ] google_search.serper           count=2 query=Sony WH-1000XM5 site:temu.com
+2026-05-28 18:47:16 [info     ] google_search.serper           count=0 query=Sony WH-1000XM5 site:namshi.com
+2026-05-28 18:47:16 [info     ] google_search.serper           count=2 query=Sony WH-1000XM5 site:amazon.ae
+2026-05-28 18:47:17 [info     ] shopping_matched               hits=8 platform=amazon
+2026-05-28 18:47:17 [info     ] shopping_matched               hits=0 platform=namshi
+2026-05-28 18:47:17 [info     ] shopping_matched               hits=0 platform=temu
+2026-05-28 18:47:17 [info     ] shopping_matched               hits=2 platform=noon
+2026-05-28 18:47:17 [warning  ] aliexpress_no_api_key
+2026-05-28 18:47:17 [info     ] no_price_found                 platform=temu url=https://www.temu.com/case-for-sony-wf-1000xm5-wireless-headphones-xm5-protective-cover-g-601101814660398.html
+2026-05-28 18:47:17 [info     ] no_price_found                 platform=temu url=https://www.temu.com/ma-ar/%D8%B7%D9%82%D9%85-5-%D9%82%D8%B7%D8%B9-%D9%85%D9%86%D8%A7%D8%B3%D8%A8-%D9%84%D8%B3%D9%85%D8%A7%D8%B9%D8%A7%D8%AA-sony--%D8%AD%D8%A7%D9%81%D8%B8%D8%A9-%D9%88%D8%A7%D9%82%D9%8A%D8%A9-%D9%85%D9%86-%D8%A7%D9%84%D8%B3%D9%8A%D9%84%D9%8A%D9%83%D9%88%D9%86-%D9%82%D9%88%D8%A7%D8%B7%D8%B9-%D8%AF%D9%82%D9%8A%D9%82%D8%A9-%D8%AE%D9%81%D9%8A%D9%81%D8%A9-%D8%A7%D9%84%D9%88%D8%B2%D9%86-%D9%85%D9%82%D8%A7%D9%88%D9%85%D8%A9-%D9%84%D9%84%D8%BA%D8%A8%D8%A7%D8%B1-%D9%85%D9%82%D8%A7%D9%88%D9%85%D8%A9-%D9%84%D9%84%D8%AE%D8%AF%D8%B4-%D9%85%D9%82%D8%A7%D9%88%D9%85%D8%A9-%D9%84%D9%84%D8%B5%D8%AF%D9%85%D8%A7%D8%AA-%D8%AA%D8%AA%D8%B6%D9%85%D9%86-%D8%BA%D8%B7%D8%A7%D8%A1-%D8%BA%D9%84%D8%A7%D9%81-%D8%AE%D8%A7%D8%B1%D8%AC%D9%8A-%D8%BA%D8%B7%D8%A7%D8%A1-%D8%A8%D8%B7%D8%A7%D9%86%D8%A9-%D8%AF%D8%A7%D8%AE%D9%84%D9%8A%D8%A9-g-601100593126522.html
+2026-05-28 18:47:17 [info     ] search_complete                ms=2540 prices=4 query=Sony WH-1000XM5
+INFO:     127.0.0.1:57336 - "POST /api/search/ HTTP/1.1" 200 OK
+2026-05-28 18:47:37 [info     ] cache_hit                      query=Sony WH-1000XM5
+INFO:     127.0.0.1:63260 - "POST /api/search/ HTTP/1.1" 200 OK
+2026-05-28 18:48:26 [info     ] google_search.serper           count=2 query=Samsung Galaxy S24 Ultra site:amazon.ae
+2026-05-28 18:48:26 [info     ] google_search.serper           count=2 query=Samsung Galaxy S24 Ultra site:namshi.com
+2026-05-28 18:48:27 [info     ] google_search.serper           count=2 query=Samsung Galaxy S24 Ultra site:noon.com
+2026-05-28 18:48:27 [info     ] google_search.serper           count=2 query=Samsung Galaxy S24 Ultra site:temu.com
+2026-05-28 18:48:29 [info     ] shopping_matched               hits=3 platform=amazon
+2026-05-28 18:48:29 [info     ] shopping_matched               hits=0 platform=namshi
+2026-05-28 18:48:29 [info     ] shopping_matched               hits=0 platform=temu
+2026-05-28 18:48:29 [info     ] shopping_matched               hits=6 platform=noon
+2026-05-28 18:48:29 [warning  ] aliexpress_no_api_key
+2026-05-28 18:48:29 [info     ] no_price_found                 platform=temu url=https://www.temu.com/ca/case-for-samsung-galaxy-s24-ultra-5g-featuring-drop-protection-a--fit-dual-layer-rubber-bumper-and-a-rugged-hard-cover--compatible-with-wireless-g-601101248175999.html
+2026-05-28 18:48:30 [info     ] no_price_found                 platform=temu url=https://www.temu.com/mt/2pcs-suitable-for-samsung-galaxy-s24-ultra-privacy-screen-protector-supports-fingerprint-unlock-9h-tempered-glass-advanced-anti--film---protection-suitable-for-samsung-phone-screen-protector-g-601101487752886.html
+2026-05-28 18:48:39 [warning  ] scrape_timeout                 platform=namshi url=https://www.namshi.com/saudi-en/buy-burga-burga-phone-case-compatible-with-samsung-galaxy-s24-ultra-mobile-phone-case-hybrid-2-layer-hard-shell-silicone-protective-case-bloomy-garden-vintage-scratch-resistant-shockproof-cover/ZE649AB2896AC78AC08F1Z/p/
+2026-05-28 18:48:39 [info     ] no_price_found                 platform=namshi url=https://www.namshi.com/saudi-en/buy-burga-burga-phone-case-compatible-with-samsung-galaxy-s24-ultra-mobile-phone-case-hybrid-2-layer-hard-shell-silicone-protective-case-bloomy-garden-vintage-scratch-resistant-shockproof-cover/ZE649AB2896AC78AC08F1Z/p/
+2026-05-28 18:48:49 [warning  ] scrape_timeout                 platform=namshi url=https://www.namshi.com/saudi-en/buy-mobcos-mobcos-samsung-galaxy-s24-ultra-self-love-premium-case-compatible-with-hybrid-dual-layer-hard-shell-silicone-protection-scratch-resistant-shockproof-mobile-cover/ZA1FF49E6924AA548FDA8Z/p/
+2026-05-28 18:48:49 [info     ] no_price_found                 platform=namshi url=https://www.namshi.com/saudi-en/buy-mobcos-mobcos-samsung-galaxy-s24-ultra-self-love-premium-case-compatible-with-hybrid-dual-layer-hard-shell-silicone-protection-scratch-resistant-shockproof-mobile-cover/ZA1FF49E6924AA548FDA8Z/p/
+2026-05-28 18:48:49 [info     ] search_complete                ms=23823 prices=4 query=Samsung Galaxy S24 Ultra
+INFO:     127.0.0.1:49965 - "POST /api/search/ HTTP/1.1" 200 OK
+2026-05-28 18:49:35 [info     ] google_search.serper           count=1 query=Xiaomi 14 Ultra site:namshi.com
+2026-05-28 18:49:35 [info     ] google_search.serper           count=2 query=Xiaomi 14 Ultra site:amazon.ae
+2026-05-28 18:49:35 [info     ] google_search.serper           count=2 query=Xiaomi 14 Ultra site:temu.com
+2026-05-28 18:49:36 [info     ] google_search.serper           count=2 query=Xiaomi 14 Ultra site:noon.com
+2026-05-28 18:49:41 [info     ] shopping_matched               hits=1 platform=amazon
+2026-05-28 18:49:41 [info     ] shopping_matched               hits=0 platform=namshi
+2026-05-28 18:49:41 [info     ] shopping_matched               hits=0 platform=temu
+2026-05-28 18:49:41 [info     ] shopping_matched               hits=8 platform=noon
+2026-05-28 18:49:41 [warning  ] aliexpress_no_api_key
+2026-05-28 18:49:42 [info     ] no_price_found                 platform=temu url=https://www.temu.com/compatible-with-xiaomi-15-ultra-xiaomi-14-ultra-xiaomi-15-pro--xiaomi-15-and--xiaomi-14-lightweight-luxury-retro--pu-leather-texture--splicing-full-coverage-anti-drop-phone-case-for--men-and-women-g-601101807869122.html
+2026-05-28 18:49:42 [info     ] no_price_found                 platform=temu url=https://www.temu.com/gr-en/3pcs-privacy-hydrogel-film-for-xiaomi-14-ultra-for-xiaomi-14t-pro-for--for-xiaomi-14t-for-xiaomi-14-full-screen-coverage-anti-fingerprint-anti--soft-film-mobile-screen-protector-g-601102215195424.html
+2026-05-28 18:49:51 [warning  ] scrape_timeout                 platform=namshi url=https://www.namshi.com/saudi-ar/buy-xiaomi-smart-band-8-active-vibrant-1-47-tft-display-9-99mm-ultra-slim-body-5atm-water-resistant-14-days-battery-life-gps-100-workout-mode-full-scale-fitness-tracking/ZE3B449200AD126B12C6FZ/p/
+2026-05-28 18:49:51 [info     ] no_price_found                 platform=namshi url=https://www.namshi.com/saudi-ar/buy-xiaomi-smart-band-8-active-vibrant-1-47-tft-display-9-99mm-ultra-slim-body-5atm-water-resistant-14-days-battery-life-gps-100-workout-mode-full-scale-fitness-tracking/ZE3B449200AD126B12C6FZ/p/
+2026-05-28 18:49:51 [info     ] search_complete                ms=17313 prices=4 query=Xiaomi 14 Ultra
+INFO:     127.0.0.1:56867 - "POST /api/search/ HTTP/1.1" 200 OK

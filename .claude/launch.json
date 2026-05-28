@@ -1,0 +1,23 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "waffir-expo-web",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["expo", "start", "--web", "--port", "8081", "--no-dev-client"],
+      "port": 8081
+    },
+    {
+      "name": "waffir-preview",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-l", "3456", "."],
+      "port": 3456
+    },
+    {
+      "name": "assets-design",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-l", "3457", "assets-design"],
+      "port": 3457
+    }
+  ]
+}

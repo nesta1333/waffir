@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>وفّر — Vibrant Neo-Glassmorphism Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:            #141218;
+      --bg-deep:       #0f0d13;
+      --surface-low:   #1d1b20;
+      --surface:       #211f26;
+      --surface-high:  #2b2930;
+      --primary:       #cfbcff;
+      --primary-dim:   rgba(207,188,255,0.15);
+      --primary-border:rgba(207,188,255,0.25);
+      --tertiary:      #e7c365;
+      --lime:          #CCFF00;
+      --lime-dim:      rgba(204,255,0,0.12);
+      --lime-border:   rgba(204,255,0,0.40);
+      --cyan:          #00F2FF;
+      --cyan-dim:      rgba(0,242,255,0.10);
+      --cyan-border:   rgba(0,242,255,0.30);
+      --purple:        #A020F0;
+      --glass:         rgba(255,255,255,0.03);
+      --glass-border:  rgba(255,255,255,0.05);
+      --glass-bright:  rgba(255,255,255,0.09);
+      --text-1:        #ffffff;
+      --text-2:        rgba(255,255,255,0.60);
+      --text-3:        rgba(255,255,255,0.35);
+      --emerald:       #2DD36F;
+      --red:           #ffb4ab;
+    }
+
+    html, body {
+      background: var(--bg);
+      font-family: 'Almarai', 'Inter', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Mesh gradient background ── */
+    .mesh-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .mesh-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      animation: drift 18s ease-in-out infinite;
+    }
+    .mesh-orb-1 {
+      width: 500px; height: 500px;
+      top: -150px; right: -100px;
+      background: radial-gradient(circle, rgba(120,40,200,0.18) 0%, transparent 70%);
+      animation-delay: 0s;
+    }
+    .mesh-orb-2 {
+      width: 400px; height: 400px;
+      top: 40vh; left: -120px;
+      background: radial-gradient(circle, rgba(0,80,180,0.12) 0%, transparent 70%);
+      animation-delay: -6s;
+    }
+    .mesh-orb-3 {
+      width: 350px; height: 350px;
+      bottom: -80px; right: 30%;
+      background: radial-gradient(circle, rgba(160,32,240,0.10) 0%, transparent 70%);
+      animation-delay: -12s;
+    }
+    @keyframes drift {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33%       { transform: translate(40px, -30px) scale(1.08); }
+      66%       { transform: translate(-20px, 20px) scale(0.95); }
+    }
+
+    /* ── Layout ── */
+    .page-wrap {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 20px;
+      gap: 80px;
+    }
+
+    .screen-label {
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 16px;
+    }
+
+    /* ── Phone shell ── */
+    .phone {
+      width: 390px;
+      min-height: 844px;
+      background: var(--bg);
+      border-radius: 50px;
+      border: 1.5px solid var(--glass-bright);
+      box-shadow:
+        0 0 0 8px rgba(255,255,255,0.03),
+        0 40px 80px rgba(0,0,0,0.6),
+        0 0 60px rgba(120,40,200,0.12);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .phone-notch {
+      width: 120px; height: 34px;
+      background: #000;
+      border-radius: 0 0 20px 20px;
+      margin: 0 auto;
+      flex-shrink: 0;
+    }
+    .phone-body { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+
+    /* ── Glass card ── */
+    .glass-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    .glass-card.cyan-border  { border-color: var(--cyan-border);  box-shadow: 0 0 14px rgba(0,242,255,0.08); }
+    .glass-card.lime-border  { border-color: var(--lime-border);  box-shadow: 0 0 14px rgba(204,255,0,0.10); }
+    .glass-card.purple-border{ border-color: var(--primary-border); box-shadow: 0 0 14px rgba(207,188,255,0.08); }
+
+    /* ──────────────────────────────────────────
+       SCREEN 1 — HOME
+    ────────────────────────────────────────── */
+    .s-home {
+      flex: 1;
+      overflow-y: auto;
+      scrollbar-width: none;
+      padding-bottom: 100px;
+      position: relative;
+    }
+    .s-home::-webkit-scrollbar { display: none; }
+    .s-home .mesh-local { position:absolute; top:-80px; right:-60px; width:280px; height:280px; border-radius:50%; background:radial-gradient(circle,rgba(120,40,200,0.15) 0%,transparent 70%); pointer-events:none; filter:blur(40px); }
+    .s-home .mesh-local2 { position:absolute; top:320px; left:-80px; width:220px; height:220px; border-radius:50%; background:radial-gradient(circle,rgba(0,100,200,0.09) 0%,transparent 70%); pointer-events:none; filter:blur(40px); }
+
+    .home-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 20px 16px;
+    }
+    .logo-row { display:flex;align-items:center; }
+    .logo-text { font-family:'Almarai',sans-serif;font-weight:800;font-size:30px;color:var(--primary);letter-spacing:-1px; }
+    .logo-dot { width:7px;height:7px;border-radius:50%;background:var(--cyan);margin-right:4px;margin-bottom:6px;display:inline-block; }
+    .notif-btn { width:40px;height:40px;border-radius:20px;background:var(--glass);border:1px solid var(--glass-border);display:flex;align-items:center;justify-content:center;font-size:18px;position:relative; }
+    .notif-dot { position:absolute;top:8px;left:8px;width:8px;height:8px;border-radius:50%;background:var(--red);border:1.5px solid var(--bg); }
+
+    .tagline-block { padding:0 20px 20px; }
+    .tagline { font-size:24px;font-weight:800;color:var(--text-1);line-height:1.4;text-align:right; }
+    .tagline-sub { font-size:13px;color:var(--text-2);margin-top:6px;text-align:right;font-weight:400; }
+
+    .search-wrap { padding:0 20px 24px; }
+    .search-bar { display:flex;align-items:center;gap:10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:30px;padding:11px 16px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 0 20px rgba(207,188,255,0.07),inset 0 0 12px rgba(207,188,255,0.03); }
+    .search-icon { font-size:16px;opacity:0.6; }
+    .search-input { flex:1;background:none;border:none;outline:none;color:var(--text-2);font-family:'Almarai',sans-serif;font-size:14px;text-align:right; }
+    .search-btn { background:var(--cyan);color:#0f0d13;border:none;border-radius:20px;padding:7px 16px;font-family:'Almarai',sans-serif;font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap; }
+
+    .section { margin-bottom:22px; }
+    .section-header { display:flex;justify-content:space-between;align-items:center;padding:0 20px;margin-bottom:12px; }
+    .section-title { font-size:15px;font-weight:700;color:var(--text-1);padding:0 20px;margin-bottom:12px; }
+    .see-all { font-size:12px;color:var(--cyan);font-weight:700; }
+
+    .chips-row { display:flex;gap:8px;padding:0 20px;overflow-x:auto;scrollbar-width:none; }
+    .chips-row::-webkit-scrollbar { display:none; }
+    .chip { background:var(--glass);border:1px solid var(--primary-border);border-radius:20px;padding:6px 14px;color:var(--primary);font-size:12px;white-space:nowrap;cursor:pointer; }
+
+    .trending-row { display:flex;gap:0;padding:0 8px 4px 20px;overflow-x:auto;scrollbar-width:none; }
+    .trending-row::-webkit-scrollbar { display:none; }
+    .trend-card { min-width:165px;height:220px;border-radius:24px;border:1px solid var(--cyan-border);overflow:hidden;position:relative;margin-left:12px;flex-shrink:0;cursor:pointer;box-shadow:0 0 16px rgba(0,242,255,0.07); }
+    .trend-card-img { width:100%;height:65%;background:linear-gradient(135deg,var(--surface-low),var(--surface));display:flex;align-items:center;justify-content:center;font-size:40px; }
+    .trend-card-fade { position:absolute;bottom:0;left:0;right:0;height:60%;background:linear-gradient(to top,rgba(20,18,24,0.97) 0%,transparent 100%); }
+    .trend-card-content { position:absolute;bottom:12px;left:10px;right:10px; }
+    .trend-card-name { font-size:12px;font-weight:700;color:var(--text-1);text-align:right;margin-bottom:6px;line-height:1.4; }
+    .trend-card-price { font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:var(--tertiary); }
+    .trend-savings { position:absolute;top:10px;left:10px;background:var(--lime);color:#0f0d13;font-size:10px;font-weight:700;border-radius:8px;padding:3px 7px; }
+
+    .platforms-grid { display:flex;flex-wrap:wrap;gap:8px;padding:0 20px; }
+    .platform-pill { display:flex;align-items:center;gap:6px;background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:6px 12px; }
+    .platform-dot { width:8px;height:8px;border-radius:50%; }
+    .platform-label { font-size:12px;color:var(--text-2); }
+    .local-tag { font-size:10px;color:var(--emerald);background:rgba(45,211,111,0.15);padding:2px 6px;border-radius:6px; }
+
+    .stats-banner { margin:0 20px;border-radius:20px;border:1px solid var(--cyan-border);background:var(--cyan-dim);display:flex;align-items:center;padding:18px 0; }
+    .stat-item { flex:1;text-align:center; }
+    .stat-value { font-family:'Inter',sans-serif;font-size:17px;font-weight:700;color:var(--cyan); }
+    .stat-label { font-size:11px;color:var(--text-2);margin-top:3px; }
+    .stat-div { width:1px;height:32px;background:var(--glass-border); }
+
+    .tab-bar { display:flex;background:rgba(15,13,19,0.88);border-top:1px solid var(--glass-border);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);padding:10px 0 20px;flex-shrink:0; }
+    .tab-item { flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer; }
+    .tab-icon { font-size:20px;opacity:0.4; }
+    .tab-icon.active { opacity:1; }
+    .tab-label { font-size:10px;color:var(--text-3); }
+    .tab-label.active { color:var(--primary);font-weight:700; }
+    .tab-dot { width:20px;height:3px;border-radius:2px;background:var(--cyan);margin-top:2px; }
+
+    /* ──────────────────────────────────────────
+       SCREEN 2 — SEARCH RESULTS
+    ────────────────────────────────────────── */
+    .s-results { flex:1;display:flex;flex-direction:column; }
+    .home-dimmed { padding:20px 20px 12px;opacity:0.35;flex-shrink:0; }
+    .sheet { background:var(--surface-low);border-radius:28px 28px 0 0;border-top:1px solid var(--glass-border);flex:1;overflow-y:auto;scrollbar-width:none; }
+    .sheet::-webkit-scrollbar { display:none; }
+    .sheet-handle { width:40px;height:4px;border-radius:2px;background:var(--glass-bright);margin:12px auto; }
+    .sheet-header { display:flex;justify-content:space-between;align-items:center;padding:8px 20px 16px; }
+    .sheet-title { font-size:15px;font-weight:700;color:var(--text-1); }
+    .sort-tabs { display:flex;gap:6px; }
+    .sort-tab { font-size:11px;padding:5px 10px;border-radius:14px;border:1px solid var(--glass-border);color:var(--text-3);background:var(--glass); }
+    .sort-tab.active { border-color:var(--cyan-border);color:var(--cyan);background:var(--cyan-dim); }
+
+    .price-card { background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:16px 18px;margin:0 16px 10px;transition:transform 0.2s; }
+    .price-card.best { border-color:var(--lime-border);background:rgba(204,255,0,0.04);box-shadow:0 0 18px rgba(204,255,0,0.09); }
+    .best-ribbon { display:inline-block;background:var(--lime);color:#0f0d13;font-size:10px;font-weight:700;padding:3px 10px;margin:-16px -18px 12px;border-radius:20px 0 10px 0; }
+    .card-top { display:flex;justify-content:space-between;align-items:center;margin-bottom:10px; }
+    .platform-badge { display:flex;align-items:center;gap:8px; }
+    .platform-logo { width:28px;height:28px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px; }
+    .platform-name { font-size:13px;font-weight:700;color:var(--text-1); }
+    .card-price { font-family:'Inter',sans-serif;font-size:24px;font-weight:700;color:var(--text-1);margin-bottom:4px; }
+    .card-price.lime { color:var(--lime); }
+    .card-shipping { font-size:12px;color:var(--text-2);margin-bottom:10px; }
+    .card-shipping.free { color:var(--emerald); }
+    .card-footer { display:flex;justify-content:space-between;align-items:center; }
+    .tap-hint { font-size:11px;color:var(--text-3); }
+    .buy-btn-sm { border:1px solid var(--cyan-border);background:var(--glass);color:var(--cyan);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;font-family:'Almarai',sans-serif;cursor:pointer; }
+
+    /* ──────────────────────────────────────────
+       SCREEN 3 — PRODUCT DETAIL
+    ────────────────────────────────────────── */
+    .s-product { flex:1;display:flex;flex-direction:column;overflow:hidden; }
+    .s-product-scroll { flex:1;overflow-y:auto;scrollbar-width:none; }
+    .s-product-scroll::-webkit-scrollbar { display:none; }
+    .top-bar { display:flex;align-items:center;gap:12px;padding:16px 16px 12px; }
+    .icon-btn { width:36px;height:36px;border-radius:18px;background:var(--glass);border:1px solid var(--glass-border);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;flex-shrink:0; }
+    .top-bar-title { flex:1;font-size:14px;font-weight:700;color:var(--text-1);text-align:right; }
+    .hero-img { width:100%;height:200px;background:linear-gradient(135deg,var(--surface-low) 0%,var(--surface-high) 100%);display:flex;align-items:center;justify-content:center;font-size:68px;position:relative;overflow:hidden; }
+    .hero-overlay { position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to top,rgba(20,18,24,0.92),transparent); }
+    .savings-banner { margin:-18px 20px 0;border-radius:16px;border:1px solid var(--lime-border);background:rgba(204,255,0,0.14);display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 20px;position:relative;z-index:2;box-shadow:0 0 20px rgba(204,255,0,0.12); }
+    .savings-title { font-size:13px;font-weight:700;color:#0f0d13; }
+    .savings-amount { font-family:'Inter',sans-serif;font-size:19px;font-weight:700;color:#0f0d13; }
+    .savings-pct { font-family:'Inter',sans-serif;font-size:12px;color:rgba(15,13,19,0.7); }
+    .product-name-block { padding:18px 20px 12px;text-align:right; }
+    .product-name { font-size:19px;font-weight:800;color:var(--text-1);line-height:1.4; }
+    .product-name-en { font-family:'Inter',sans-serif;font-size:12px;color:var(--text-2);margin-top:4px; }
+    .brand-tag { font-family:'Inter',sans-serif;font-size:11px;color:var(--text-3);margin-top:4px; }
+    .best-deal-card { margin:0 20px 18px;display:flex;justify-content:space-between;align-items:center;padding:16px; }
+    .best-deal-label { font-size:12px;color:var(--text-2);margin-bottom:6px; }
+    .best-deal-price { font-family:'Inter',sans-serif;font-size:26px;font-weight:700;color:var(--lime); }
+    .best-deal-ship { font-size:12px;color:var(--emerald);margin-top:4px; }
+    .best-plat-side { text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px; }
+    .best-plat-logo { width:40px;height:40px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;background:var(--glass);border:1px solid var(--glass-border); }
+    .best-plat-name { font-size:12px;font-weight:700; }
+    .best-delivery { font-size:11px;color:var(--text-2); }
+    .section-padded { padding:0 20px;margin-bottom:18px; }
+    .section-title-padded { font-size:15px;font-weight:700;color:var(--text-1);text-align:right;margin-bottom:12px; }
+    .trust-row { display:flex;align-items:center;gap:10px;margin-bottom:8px; }
+    .trust-bar-wrap { flex:1;height:5px;background:var(--glass);border-radius:3px;overflow:hidden; }
+    .trust-bar { height:5px;border-radius:3px; }
+    .trust-score { font-family:'Inter',sans-serif;font-size:11px;color:var(--text-2);width:32px;text-align:left; }
+    .sticky-bar { display:flex;gap:10px;padding:12px 20px 20px;background:rgba(15,13,19,0.92);border-top:1px solid var(--glass-border);backdrop-filter:blur(20px);flex-shrink:0; }
+    .alert-btn { padding:12px 14px;border-radius:14px;border:1px solid var(--primary-border);background:var(--glass);color:var(--primary);font-size:12px;font-weight:700;font-family:'Almarai',sans-serif;cursor:pointer;white-space:nowrap; }
+    .buy-btn-main { flex:1;border:none;border-radius:16px;background:linear-gradient(135deg,#00F2FF,#00c4cc);color:#0f0d13;font-size:14px;font-weight:800;font-family:'Almarai',sans-serif;padding:12px;cursor:pointer;text-align:center; }
+    .buy-btn-sub { font-family:'Inter',sans-serif;font-size:10px;opacity:0.7;display:block;margin-top:2px; }
+
+    /* ──────────────────────────────────────────
+       SCREEN 4 — PRICE ALERTS
+    ────────────────────────────────────────── */
+    .s-alerts { flex:1;display:flex;flex-direction:column;overflow:hidden; }
+    .s-alerts-scroll { flex:1;overflow-y:auto;scrollbar-width:none;padding-bottom:20px; }
+    .s-alerts-scroll::-webkit-scrollbar { display:none; }
+    .alerts-header { padding:20px 20px 24px;text-align:right; }
+    .alerts-title { font-size:23px;font-weight:800;color:var(--text-1); }
+    .alerts-sub { font-size:13px;color:var(--text-2);margin-top:6px; }
+    .alert-card { margin:0 20px 12px;padding:14px;display:flex;align-items:center;gap:12px; }
+    .alert-product-img { width:48px;height:48px;border-radius:14px;background:var(--surface-high);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0; }
+    .alert-info { flex:1; }
+    .alert-product-name { font-size:13px;font-weight:700;color:var(--text-1);text-align:right;margin-bottom:4px; }
+    .alert-target { font-size:11px;color:var(--text-2);text-align:right;margin-bottom:6px; }
+    .alert-target span { font-family:'Inter',sans-serif;color:var(--tertiary);font-weight:700; }
+    .alert-progress-wrap { height:3px;background:var(--glass-bright);border-radius:2px;overflow:hidden; }
+    .alert-progress { height:3px;border-radius:2px;background:linear-gradient(90deg,var(--cyan),var(--primary)); }
+    .alert-badge { background:var(--primary-dim);color:var(--primary);font-size:10px;font-weight:700;padding:4px 10px;border-radius:10px;white-space:nowrap; }
+
+    .screen-section { display:flex;flex-direction:column;align-items:center; }
+  </style>
+</head>
+<body>
+  <!-- Animated mesh background -->
+  <div class="mesh-bg">
+    <div class="mesh-orb mesh-orb-1"></div>
+    <div class="mesh-orb mesh-orb-2"></div>
+    <div class="mesh-orb mesh-orb-3"></div>
+  </div>
+
+  <div class="page-wrap">
+
+    <!-- ══════════════════════════════════════
+         SCREEN 1 — HOME
+    ══════════════════════════════════════ -->
+    <div class="screen-section">
+      <div class="screen-label">Screen 01 — Home</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-body">
+          <div class="s-home">
+            <div class="mesh-local"></div>
+            <div class="mesh-local2"></div>
+
+            <div class="home-header">
+              <div class="notif-btn">🔔<div class="notif-dot"></div></div>
+              <div class="logo-row"><span class="logo-text">وفّر</span><span class="logo-dot"></span></div>
+            </div>
+
+            <div class="tagline-block">
+              <div class="tagline">أفضل سعر في كل مكان</div>
+              <div class="tagline-sub">نقارن فوراً من 8 منصات خليجية وعالمية</div>
+            </div>
+
+            <div class="search-wrap">
+              <div class="search-bar">
+                <button class="search-btn">بحث</button>
+                <input class="search-input" placeholder="ابحث عن أي منتج..." />
+                <span class="search-icon">🔍</span>
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">بحث أخير</div>
+              <div class="chips-row">
+                <div class="chip">آيفون 16</div>
+                <div class="chip">سامسونج S25</div>
+                <div class="chip">دايسون V15</div>
+                <div class="chip">نايكي</div>
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="section-header">
+                <div class="see-all">الكل</div>
+                <div class="section-title" style="margin:0;padding:0">🔥 عروض رائجة</div>
+              </div>
+              <div class="trending-row">
+                <div class="trend-card">
+                  <div class="trend-card-img">📱</div>
+                  <div class="trend-card-fade"></div>
+                  <div class="trend-savings">وفّر 18%</div>
+                  <div class="trend-card-content">
+                    <div class="trend-card-name">سامسونج Galaxy S25 Ultra</div>
+                    <div class="trend-card-price">4,299 د.إ</div>
+                  </div>
+                </div>
+                <div class="trend-card">
+                  <div class="trend-card-img">🎧</div>
+                  <div class="trend-card-fade"></div>
+                  <div class="trend-savings">وفّر 22%</div>
+                  <div class="trend-card-content">
+                    <div class="trend-card-name">Sony WH-1000XM5</div>
+                    <div class="trend-card-price">1,099 د.إ</div>
+                  </div>
+                </div>
+                <div class="trend-card">
+                  <div class="trend-card-img">👟</div>
+                  <div class="trend-card-fade"></div>
+                  <div class="trend-savings">وفّر 31%</div>
+                  <div class="trend-card-content">
+                    <div class="trend-card-name">Nike Air Max 270</div>
+                    <div class="trend-card-price">459 د.إ</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">نبحث لك في</div>
+              <div class="platforms-grid">
+                <div class="platform-pill"><div class="platform-dot" style="background:#FF9900"></div><span class="platform-label">أمازون</span><span class="local-tag">محلي</span></div>
+                <div class="platform-pill"><div class="platform-dot" style="background:#F5DC00"></div><span class="platform-label">نون</span><span class="local-tag">محلي</span></div>
+                <div class="platform-pill"><div class="platform-dot" style="background:#FF6B35"></div><span class="platform-label">نمشي</span></div>
+                <div class="platform-pill"><div class="platform-dot" style="background:#E43226"></div><span class="platform-label">علي إكسبرس</span></div>
+                <div class="platform-pill"><div class="platform-dot" style="background:#FA5130"></div><span class="platform-label">تيمو</span></div>
+              </div>
+            </div>
+
+            <div style="padding:0 0 22px">
+              <div class="stats-banner">
+                <div class="stat-item"><div class="stat-value">8+</div><div class="stat-label">منصة</div></div>
+                <div class="stat-div"></div>
+                <div class="stat-item"><div class="stat-value">30 د</div><div class="stat-label">تحديث كل</div></div>
+                <div class="stat-div"></div>
+                <div class="stat-item"><div class="stat-value">مجاني</div><div class="stat-label">استخدام</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-bar">
+            <div class="tab-item"><div class="tab-icon active">🏷️</div><div class="tab-label active">الصفقات</div><div class="tab-dot"></div></div>
+            <div class="tab-item"><div class="tab-icon">⚖️</div><div class="tab-label">المقارنة</div></div>
+            <div class="tab-item"><div class="tab-icon">⚙️</div><div class="tab-label">الإعدادات</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         SCREEN 2 — SEARCH RESULTS
+    ══════════════════════════════════════ -->
+    <div class="screen-section">
+      <div class="screen-label">Screen 02 — Search Results</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-body">
+          <div class="s-results">
+            <div class="home-dimmed">
+              <div class="home-header" style="padding:0 0 12px">
+                <div class="notif-btn">🔔</div>
+                <span class="logo-text">وفّر</span>
+              </div>
+              <div class="search-bar" style="opacity:0.6">
+                <button class="search-btn">بحث</button>
+                <span style="flex:1;text-align:right;color:var(--text-3);font-size:13px">سامسونج Galaxy S25 Ultra</span>
+                <span>🔍</span>
+              </div>
+            </div>
+
+            <div class="sheet">
+              <div class="sheet-handle"></div>
+              <div class="sheet-header">
+                <div class="sort-tabs">
+                  <div class="sort-tab active">الأرخص</div>
+                  <div class="sort-tab">الأسرع</div>
+                  <div class="sort-tab">الأوثق</div>
+                </div>
+                <div class="sheet-title">سامسونج S25 Ultra</div>
+              </div>
+
+              <div class="price-card best">
+                <div class="best-ribbon">⭐ أفضل سعر</div>
+                <div class="card-top">
+                  <div><span style="background:var(--lime-dim);color:var(--lime);font-size:10px;font-weight:700;padding:3px 8px;border-radius:8px">الأرخص</span></div>
+                  <div class="platform-badge">
+                    <span class="platform-name">نون</span>
+                    <div class="platform-logo" style="background:rgba(245,220,0,0.12)">🛒</div>
+                  </div>
+                </div>
+                <div class="card-price lime">4,299 د.إ</div>
+                <div class="card-shipping free">✓ شحن مجاني · يومان</div>
+                <div class="card-footer">
+                  <button class="buy-btn-sm">شراء</button>
+                  <span class="tap-hint">اضغط للتفاصيل</span>
+                </div>
+              </div>
+
+              <div class="price-card">
+                <div class="card-top">
+                  <div></div>
+                  <div class="platform-badge">
+                    <span class="platform-name">أمازون</span>
+                    <div class="platform-logo" style="background:rgba(255,153,0,0.12)">📦</div>
+                  </div>
+                </div>
+                <div class="card-price">4,499 د.إ</div>
+                <div class="card-shipping free">✓ Prime · 3 أيام</div>
+                <div class="card-footer">
+                  <button class="buy-btn-sm">شراء</button>
+                  <span class="tap-hint">اضغط للتفاصيل</span>
+                </div>
+              </div>
+
+              <div class="price-card">
+                <div class="card-top">
+                  <div></div>
+                  <div class="platform-badge">
+                    <span class="platform-name">علي إكسبرس</span>
+                    <div class="platform-logo" style="background:rgba(228,50,38,0.12)">🌐</div>
+                  </div>
+                </div>
+                <div class="card-price">3,890 د.إ</div>
+                <div class="card-shipping" style="color:var(--red)">⚠ شحن من الصين · 14 يوم</div>
+                <div class="card-footer">
+                  <button class="buy-btn-sm">شراء</button>
+                  <span class="tap-hint">اضغط للتفاصيل</span>
+                </div>
+              </div>
+
+              <div class="price-card">
+                <div class="card-top">
+                  <div></div>
+                  <div class="platform-badge">
+                    <span class="platform-name">نمشي</span>
+                    <div class="platform-logo" style="background:rgba(255,107,53,0.12)">👗</div>
+                  </div>
+                </div>
+                <div class="card-price">4,750 د.إ</div>
+                <div class="card-shipping">شحن: 29 د.إ · 5 أيام</div>
+                <div class="card-footer">
+                  <button class="buy-btn-sm">شراء</button>
+                  <span class="tap-hint">اضغط للتفاصيل</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         SCREEN 3 — PRODUCT DETAIL
+    ══════════════════════════════════════ -->
+    <div class="screen-section">
+      <div class="screen-label">Screen 03 — Product Detail</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-body">
+          <div class="s-product">
+            <div class="s-product-scroll">
+              <div class="top-bar">
+                <div class="icon-btn">✕</div>
+                <div class="top-bar-title">سامسونج Galaxy S25 Ultra</div>
+                <div class="icon-btn">↑</div>
+              </div>
+
+              <div class="hero-img">📱<div class="hero-overlay"></div></div>
+
+              <div class="savings-banner">
+                <span class="savings-pct">(18%)</span>
+                <span class="savings-amount">609 د.إ</span>
+                <span class="savings-title">وفّر حتى</span>
+              </div>
+
+              <div class="product-name-block">
+                <div class="product-name">سامسونج Galaxy S25 Ultra</div>
+                <div class="product-name-en">Samsung Galaxy S25 Ultra 512GB</div>
+                <div class="brand-tag">Samsung · Smartphones</div>
+              </div>
+
+              <div class="glass-card lime-border best-deal-card">
+                <div>
+                  <div class="best-deal-label">أفضل سعر الآن</div>
+                  <div class="best-deal-price">4,299 د.إ</div>
+                  <div class="best-deal-ship">✓ شحن مجاني</div>
+                </div>
+                <div class="best-plat-side">
+                  <div class="best-plat-logo">🛒</div>
+                  <div class="best-plat-name" style="color:#F5DC00">نون</div>
+                  <div class="best-delivery">🚀 يومان</div>
+                </div>
+              </div>
+
+              <div class="section-padded">
+                <div class="section-title-padded">مقارنة الأسعار</div>
+                <div class="price-card best" style="margin:0 0 8px">
+                  <div class="best-ribbon">⭐ أفضل سعر</div>
+                  <div class="card-top"><div><span style="background:var(--lime-dim);color:var(--lime);font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px">الأرخص</span></div><div class="platform-badge"><span class="platform-name">نون</span><div class="platform-logo" style="background:rgba(245,220,0,0.12);width:24px;height:24px;border-radius:7px">🛒</div></div></div>
+                  <div class="card-price lime" style="font-size:20px">4,299 د.إ</div>
+                </div>
+                <div class="price-card" style="margin:0 0 8px">
+                  <div class="card-top"><div></div><div class="platform-badge"><span class="platform-name">أمازون</span><div class="platform-logo" style="background:rgba(255,153,0,0.12);width:24px;height:24px;border-radius:7px">📦</div></div></div>
+                  <div class="card-price" style="font-size:20px">4,499 د.إ</div>
+                </div>
+                <div class="price-card" style="margin:0">
+                  <div class="card-top"><div></div><div class="platform-badge"><span class="platform-name">علي إكسبرس</span><div class="platform-logo" style="background:rgba(228,50,38,0.12);width:24px;height:24px;border-radius:7px">🌐</div></div></div>
+                  <div class="card-price" style="font-size:20px">3,890 د.إ</div>
+                </div>
+              </div>
+
+              <div class="section-padded">
+                <div class="section-title-padded">درجة الثقة بالمنصات</div>
+                <div class="trust-row">
+                  <span style="font-size:11px;color:var(--text-2);width:56px;text-align:right">نون</span>
+                  <div class="trust-bar-wrap"><div class="trust-bar" style="width:90%;background:#F5DC00"></div></div>
+                  <div class="trust-score">90%</div>
+                </div>
+                <div class="trust-row">
+                  <span style="font-size:11px;color:var(--text-2);width:56px;text-align:right">أمازون</span>
+                  <div class="trust-bar-wrap"><div class="trust-bar" style="width:95%;background:#FF9900"></div></div>
+                  <div class="trust-score">95%</div>
+                </div>
+                <div class="trust-row">
+                  <span style="font-size:11px;color:var(--text-2);width:56px;text-align:right">علي</span>
+                  <div class="trust-bar-wrap"><div class="trust-bar" style="width:72%;background:#E43226"></div></div>
+                  <div class="trust-score">72%</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="sticky-bar">
+              <button class="alert-btn">🔔 تنبيه سعر</button>
+              <button class="buy-btn-main">🛒 اشتري الآن<span class="buy-btn-sub">4,299 د.إ · نون</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         SCREEN 4 — PRICE ALERTS
+    ══════════════════════════════════════ -->
+    <div class="screen-section">
+      <div class="screen-label">Screen 04 — Price Alerts</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-body">
+          <div class="s-alerts">
+            <div class="s-alerts-scroll">
+              <div class="alerts-header">
+                <div class="alerts-title">تنبيهات الأسعار</div>
+                <div class="alerts-sub">سنخبرك فور انخفاض السعر</div>
+              </div>
+
+              <div class="alert-card glass-card cyan-border">
+                <div class="alert-product-img">📱</div>
+                <div class="alert-info">
+                  <div class="alert-product-name">سامسونج Galaxy S25 Ultra</div>
+                  <div class="alert-target">السعر المستهدف: <span>3,955 د.إ</span></div>
+                  <div class="alert-progress-wrap"><div class="alert-progress" style="width:82%"></div></div>
+                </div>
+                <div class="alert-badge">نشط</div>
+              </div>
+
+              <div class="alert-card glass-card cyan-border">
+                <div class="alert-product-img">🎧</div>
+                <div class="alert-info">
+                  <div class="alert-product-name">Sony WH-1000XM5</div>
+                  <div class="alert-target">السعر المستهدف: <span>1,011 د.إ</span></div>
+                  <div class="alert-progress-wrap"><div class="alert-progress" style="width:60%"></div></div>
+                </div>
+                <div class="alert-badge">نشط</div>
+              </div>
+
+              <div class="alert-card glass-card cyan-border">
+                <div class="alert-product-img">🌀</div>
+                <div class="alert-info">
+                  <div class="alert-product-name">Dyson V15 Detect</div>
+                  <div class="alert-target">السعر المستهدف: <span>1,840 د.إ</span></div>
+                  <div class="alert-progress-wrap"><div class="alert-progress" style="width:45%"></div></div>
+                </div>
+                <div class="alert-badge">نشط</div>
+              </div>
+
+              <div class="alert-card glass-card cyan-border">
+                <div class="alert-product-img">🎮</div>
+                <div class="alert-info">
+                  <div class="alert-product-name">AirPods Pro 2</div>
+                  <div class="alert-target">السعر المستهدف: <span>828 د.إ</span></div>
+                  <div class="alert-progress-wrap"><div class="alert-progress" style="width:25%"></div></div>
+                </div>
+                <div class="alert-badge">نشط</div>
+              </div>
+
+              <div style="padding:20px;text-align:center">
+                <div style="font-size:12px;color:var(--text-3);margin-bottom:12px">أضف المزيد من التنبيهات</div>
+                <button style="background:var(--glass);border:1px solid var(--cyan-border);color:var(--cyan);font-family:'Almarai',sans-serif;font-size:13px;font-weight:700;padding:11px 24px;border-radius:20px;cursor:pointer">+ ابحث عن منتج</button>
+              </div>
+            </div>
+
+            <div class="tab-bar">
+              <div class="tab-item"><div class="tab-icon">🏷️</div><div class="tab-label">الصفقات</div></div>
+              <div class="tab-item"><div class="tab-icon active">⚖️</div><div class="tab-label active">التنبيهات</div><div class="tab-dot"></div></div>
+              <div class="tab-item"><div class="tab-icon">⚙️</div><div class="tab-label">الإعدادات</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /page-wrap -->
+</body>
+</html>
