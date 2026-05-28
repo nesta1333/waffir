@@ -34,3 +34,4 @@ ios/
 *.log
 .DS_Store
 google-play-key.json.expo/ 
+node_modules/ 
